@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="index.css">
+    <meta charset="utf-8">
+    <title>Shallow Water Equations</title>
+</head>
+
+<body>
+    <div class="document">
+        <div class="topnav">
+            <a class="link" href="index.html">Model Demo</a>
+            <a class="link" href="sim.html">Introduction</a>
+            <a class="link" href="model.html"> Shallow Water Equations</a>
+            <a class="link" href="sim_swe.html"> Model Description</a>
+            <a class="link" href="ref.html"> References</a>
+
+        </div>
+        <div class="text">
+
+            <h1>
+                Simulation
+            </h1>
+            The equations that are used in the model are simplified from the shallow water equations in order to make
+            simulation easier. They describe propagation of linear gravity waves in a shallow body of water.
+            <div class="img">
+                <img src="equation2.png">
+            </div>
+            The simulation uses the Arakawa grid [1] that is shown below. The velocities' grid is offset from the height
+            grid in
+            order to
+            represent flow between height cells. If the velocity components were not offset then the water velocities
+            would represent net flux of water at a given point rather then the velocity of water between two grid cells.
+            <div class="img">
+                <img src="scheme.png" width="600px">
+            </div>
+            The discretized equations used in the water simulation are shown below. Equations (1,2) calculate velocities
+            and equation (3) calculates the
+            change in height. Equations (4,5) define the half indicies used in equation (3).
+
+            <div class="img">
+                <img src="equation3.png">
+                <!--
+                   \frac{\partial u_{i,j}}{\partial t} = -\frac{h_{i+1,j}-h_{i,j}}{\Delta x}\quad(1),\\
+\frac{\partial v_{i,j}}{\partial t} = -\frac{h_{i,j+1}-h_{i,j}}{\Delta y}\quad(2),\\
+\frac{\partial h_{i,j}}{\partial t} = -\frac{h_{i+\frac{1}{2},j}u_{i,j}-h_{i-\frac{1}{2},j}u_{i-1,j}}{\Delta x}
+-\frac{h_{i,j+\frac{1}{2}}u_{i,j}-h_{i,j-\frac{1}{2}}u_{i,j-1}}{\Delta x}\quad(3),\\
+h_{i+\frac{1}{2},j} = \frac{\left(h_{i+1,j}+h_{i,j}\right)}{2}\quad(4),\\
+h_{i,j+\frac{1}{2}} = \frac{\left(h_{i,j+1}+h_{i,j}\right)}{2}\quad(5),\\
+                -->
+            </div>
+            <h1>Time Stepping Scheme</h1>
+            The simulation uses the Matsuno time stepping scheme. The Matsuno scheme is used rather then a simple
+            explicit time
+            stepping scheme
+            because it results in a more stable simulation. If an simple explicit time step was used then the model can
+            start oscillations leading to instability. Let us define the Matsuno scheme for the following vector
+            equation:
+            <div class="img">
+                <img src="equation4.png">
+                <!--
+\frac{dX}{dt} = F(x)
+                -->
+            </div>
+            First a half time step is taken as shown below,
+            <div class="img">
+                <img src="equation5.png">
+                <!--
+X^{n+\frac{1}{2}} = X^n+\frac{\Delta t}{2} F\left(X^n\right)
+                -->
+            </div>
+            Next a full time step forward is taken using the information generated from the half time step.
+            <div class="img">
+                <img src="equation6.png">
+                <!--
+X^{n+1} = X^n+\frac{\Delta t}{2} F\left(X^{n+1/2}\right)
+            -->
+            </div>
+            Next a full time step forward is taken using the information generated from the half time step.
+            The scheme is a modification of the well known family of Runge-Kutta time stepping schemes [2] which is
+            widely used in other fields.
+            <h1>
+                Limitations of Model
+            </h1>
+            The model inherits the limitations form the shallow water equations as discussed in the Shallow Water
+            Equations Section. The model is also unstable under high time steps which could be explained by the
+            simulation overshooting the correct result when simulating a timestep.
+
+
+        </div>
+
+    </div>
+</body>
+
+</html>
